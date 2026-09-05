@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 引入 Spring Boot 默认配置（含 ANSI 彩色控制台输出） -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- AIEA Logback Appender：ERROR 日志异步上报 -->
+    <!-- 注意：仅对 demo 包生效，避免服务自身日志造成上报循环 -->
+    <!-- Token 需在「服务注册」页面注册 demo-app 后获得 -->
+    <appender name="AIEA" class="com.yzk.aiea.logback.AieaLogbackAppender">
+        <serverUrl>${AIEA_SERVER_URL:-http://localhost:8080}</serverUrl>
+        <apiToken>${AIEA_API_TOKEN:-tok_demo_app_001}</apiToken>
+        <service>demo-app</service>
+        <env>${AIEA_ENV:-local}</env>
+    </appender>
+
+    <!-- demo 包的日志同时输出到控制台(CONSOLE)和 AIEA -->
+    <logger name="com.yzk.aiea.demo" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="AIEA"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

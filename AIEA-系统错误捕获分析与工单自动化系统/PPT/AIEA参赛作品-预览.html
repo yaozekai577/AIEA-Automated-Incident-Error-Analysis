@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIEA 参赛作品 · 演示预览</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Microsoft YaHei","微软雅黑",sans-serif; background:#0b1220; color:#0f172a; }
+  .bar { position:fixed; top:0; left:0; right:0; height:52px; background:#0f172a; color:#e2e8f0;
+         display:flex; align-items:center; justify-content:center; gap:18px; z-index:50; font-size:14px; }
+  .bar button { background:#1d4ed8; color:#fff; border:none; padding:7px 16px; border-radius:6px; cursor:pointer; font-size:14px; }
+  .bar button:disabled { opacity:.4; cursor:default; }
+  .bar .pg { font-variant-numeric:tabular-nums; min-width:54px; text-align:center; }
+  .stage { margin-top:52px; height:calc(100vh - 52px); display:flex; align-items:center; justify-content:center; padding:18px; }
+  .slide { width:min(96vw, 960px); aspect-ratio:16/9; background:#fff; border-radius:10px; position:relative;
+           box-shadow:0 12px 40px rgba(0,0,0,.45); overflow:hidden; display:none; padding:54px 60px; }
+  .slide.on { display:block; }
+  .kicker { color:#0ea5e9; font-size:13px; letter-spacing:2px; font-weight:700; }
+  h1 { font-size:40px; color:#1e293b; margin-top:8px; }
+  h2 { font-size:26px; color:#1e293b; margin-bottom:18px; }
+  .sec-no { position:absolute; right:42px; top:38px; font-size:120px; font-weight:800; color:rgba(29,78,216,.08); }
+  .muted { color:#64748b; }
+  ul.pts { list-style:none; margin-top:14px; }
+  ul.pts li { padding:12px 16px; margin-bottom:12px; background:#f1f5f9; border-left:4px solid #1d4ed8; border-radius:6px; font-size:16px; }
+  .chip { display:inline-block; padding:6px 14px; border-radius:20px; font-size:14px; margin:5px 6px 0 0; }
+  .c-blue { background:#dbeafe; color:#1d4ed8; }
+  .c-amber { background:#fef3c7; color:#b45309; }
+  .flow { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:20px; }
+  .flow .node { background:#1d4ed8; color:#fff; padding:12px 14px; border-radius:8px; font-size:14px; text-align:center; min-width:96px; }
+  .flow .arr { color:#1d4ed8; font-size:22px; font-weight:800; }
+  table { width:100%; border-collapse:collapse; margin-top:16px; font-size:15px; }
+  table td, table th { border:1px solid #e2e8f0; padding:10px 12px; text-align:left; }
+  table th { background:#1d4ed8; color:#fff; }
+  .grid { display:grid; gap:14px; margin-top:16px; }
+  .g2 { grid-template-columns:1fr 1fr; } .g3 { grid-template-columns:1fr 1fr 1fr; }
+  .card { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:14px; }
+  .card b { color:#1d4ed8; }
+  .ico{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;font-style:normal;font-size:14px;margin-right:8px;vertical-align:middle;color:#fff}
+  .ico-amber{background:#F59E0B}
+  .ico-blue{background:#0EA5E9}
+  .card .tag{ float:right; font-size:11px; padding:2px 9px; border-radius:11px; font-weight:700; }
+  .tag-blue{ background:#dbeafe; color:#1d4ed8; }
+  .tag-amber{ background:#fef3c7; color:#b45309; }
+  .card .hard{ color:#b91c1c; font-size:13px; margin-top:7px; line-height:1.5; }
+  .card .fix{ color:#1d4ed8; font-size:13px; margin-top:5px; line-height:1.5; }
+  .card .hard b, .card .fix b{ font-weight:700; }
+  .ph { border:2px dashed #94a3b8; border-radius:8px; display:flex; align-items:center; justify-content:center;
+        color:#475569; font-size:15px; text-align:center; padding:10px; background:#f8fafc; }
+  .big { font-size:96px; font-weight:800; color:#f59e0b; line-height:1; }
+  .center { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; }
+  .footer { position:absolute; left:60px; bottom:26px; color:#94a3b8; font-size:12px; }
+  .cover-bg { position:absolute; inset:0; background:linear-gradient(135deg,#1e3a8a,#0ea5e9); }
+  .cover-bg .orb { position:absolute; border-radius:50%; background:rgba(255,255,255,.08); }
+  .cover-content { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:center; color:#fff; padding-left:10px; }
+  .cover-content .sub { font-size:18px; opacity:.92; margin-top:6px; }
+  .cover-content .tag { display:inline-block; background:rgba(255,255,255,.16); padding:5px 14px; border-radius:20px; font-size:13px; width:fit-content; letter-spacing:1px; }
+  .cover-content .foot { position:absolute; bottom:0; font-size:14px; opacity:.9; }
+  .cover-content h1 { color:#fff; font-size:84px; letter-spacing:4px; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <button id="prev">← 上一页</button>
+  <span class="pg"><b id="cur">1</b> / 15</span>
+  <button id="next">下一页 →</button>
+  <span class="muted">（浏览器预览版，与 .pptx 内容一致）</span>
+</div>
+<div class="stage" id="stage">
+
+  <!-- 01 封面 -->
+  <section class="slide on" data-n="1">
+    <div class="cover-bg"><div class="orb" style="width:320px;height:320px;right:-80px;top:-60px"></div><div class="orb" style="width:200px;height:200px;left:-50px;bottom:-40px"></div></div>
+    <div class="cover-content">
+      <span class="tag">基于大模型的全流程异常智能分析系统</span>
+      <h1>AIEA</h1>
+      <div class="sub">AI Error Analysis · 让异常自愈，让研发回归创造</div>
+      <div class="foot">参赛人：研发一部 · 姚泽楷 ｜ 使用大模型：glm5.2 ｜ 代码 AI 率：100%</div>
+    </div>
+  </section>
+
+  <!-- 02 目录 -->
+  <section class="slide" data-n="2">
+    <div class="kicker">CONTENTS</div>
+    <h1>目录</h1>
+    <ul class="pts">
+      <li>01　背景与痛点</li>
+      <li>02　方案与架构</li>
+      <li>03　功能模块</li>
+      <li>04　技术亮点</li>
+      <li>05　大模型与 Agent 落地</li>
+      <li>06　演示与总结</li>
+    </ul>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 03 章节过渡 01 -->
+  <section class="slide" data-n="3">
+    <div class="sec-no">01</div>
+    <div class="kicker">CHAPTER 01</div>
+    <h1>背景与痛点</h1>
+    <p class="muted">微服务时代，异常处理仍依赖"人工翻日志 → 群里同步 → 手填工单"，链路长、缺沉淀。</p>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 04 痛点 -->
+  <section class="slide" data-n="4">
+    <div class="kicker">PAIN POINTS</div>
+    <h2>背景与核心痛点</h2>
+    <ul class="pts">
+      <li>① 异常发现滞后，依赖人工翻日志</li>
+      <li>② 同类错误反复出现，缺乏沉淀与复用</li>
+      <li>③ 群聊通知碎片化，关键上下文缺失</li>
+      <li>④ 工单手工创建，处理流程割裂</li>
+      <li>⑤ 根因分析依赖资深经验，新人上手慢</li>
+    </ul>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 05 目标用户 -->
+  <section class="slide" data-n="5">
+    <div class="kicker">TARGET USERS</div>
+    <h2>目标用户</h2>
+    <table>
+      <tr><th>角色</th><th>使用场景</th></tr>
+      <tr><td>后端 / 全栈工程师</td><td>异常自动上报，免手工贴堆栈；工单内直接看 AI 根因</td></tr>
+      <tr><td>技术负责人 / Tech Lead</td><td>仪表盘掌握全团队异常态势，按服务治理</td></tr>
+      <tr><td>SRE / 运维</td><td>配置通知路由，把不同服务告警精准推到对应群</td></tr>
+      <tr><td>测试 / 产品 / 值班</td><td>群聊中第一时间收到带根因的告警卡片</td></tr>
+    </table>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 06 章节过渡 02 -->
+  <section class="slide" data-n="6">
+    <div class="sec-no">02</div>
+    <div class="kicker">CHAPTER 02</div>
+    <h1>方案与架构</h1>
+    <p class="muted">把"异常捕获 → 智能去重 → AI 根因分析 → 群聊通知 → 工单闭环"全流程自动化。</p>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 07 流水线 -->
+  <section class="slide" data-n="7">
+    <div class="kicker">END-TO-END PIPELINE</div>
+    <h2>端到端处理流水线</h2>
+    <div class="flow">
+      <div class="node">异常捕获<br>（SDK/Appender/HTTP）</div><span class="arr">→</span>
+      <div class="node">堆栈指纹<br>归一化</div><span class="arr">→</span>
+      <div class="node">Redis<br>冷却去重</div><span class="arr">→</span>
+      <div class="node">AI 根因<br>分析</div><span class="arr">→</span>
+      <div class="node">飞书/钉钉<br>通知</div><span class="arr">→</span>
+      <div class="node">工单<br>闭环</div>
+    </div>
+    <p class="muted" style="margin-top:18px">异步流水线编排，事务提交后触发，不阻塞业务线程；任一组件故障均降级兜底。</p>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 08 架构 -->
+  <section class="slide" data-n="8">
+    <div class="kicker">ARCHITECTURE</div>
+    <h2>系统整体架构</h2>
+    <div class="grid g2">
+      <div class="card"><b>接入层</b><br>Java SDK / Logback Appender / HTTP API</div>
+      <div class="card"><b>核心处理层</b><br>指纹归一化 · Redis 去重限流 · LLM 根因分析 · 异步流水线</div>
+      <div class="card"><b>存储层</b><br>MySQL（10 张表）· Redis（去重/限流）</div>
+      <div class="card"><b>通知 / 闭环层</b><br>飞书/钉钉 Webhook · 内置工单（可选 Jira）</div>
+    </div>
+    <div class="card" style="margin-top:14px"><b>管理控制台</b>　React Web 控制台（仪表盘 / 错误 / 工单 / 配置）</div>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 09 章节过渡 03 -->
+  <section class="slide" data-n="9">
+    <div class="sec-no">03</div>
+    <div class="kicker">CHAPTER 03</div>
+    <h1>功能模块</h1>
+    <p class="muted">八大核心模块，覆盖异常从接入到闭环的完整生命周期。</p>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 10 功能模块 -->
+  <section class="slide" data-n="10">
+    <div class="kicker">MODULES</div>
+    <h2>核心功能模块</h2>
+    <div class="grid g2">
+      <div class="card"><b>异常自动捕获</b><br>SDK / Appender / HTTP 三种接入</div>
+      <div class="card"><b>智能去重</b><br>堆栈指纹 + Redis 冷却窗口</div>
+      <div class="card"><b>AI 根因分析</b><br>LLM 结构化根因与修复建议</div>
+      <div class="card"><b>协作通知路由</b><br>飞书/钉钉按服务分发</div>
+      <div class="card"><b>工单闭环</b><br>内置工单生命周期（可选 Jira）</div>
+      <div class="card"><b>动态配置</b><br>DB &gt; yaml &gt; 默认，热更新</div>
+      <div class="card"><b>服务注册 / Token</b><br>上报鉴权与连通性测试</div>
+      <div class="card"><b>敏感脱敏</b><br>双层脱敏，Token 仅展示一次</div>
+    </div>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 11 章节过渡 04 -->
+  <section class="slide" data-n="11">
+    <div class="sec-no">04</div>
+    <div class="kicker">CHAPTER 04</div>
+    <h1>技术亮点</h1>
+    <p class="muted">六大关键技术，支撑高可用、可观测、可落地的异常智能分析。</p>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 12 亮点 -->
+  <section class="slide" data-n="12">
+    <div class="kicker">HIGHLIGHTS</div>
+    <h2>关键技术亮点</h2>
+    <p class="muted" style="margin-top:-6px">从“难题”到“突破”：六个工程化创新点</p>
+    <div class="grid g3">
+      <div class="card"><span class="tag tag-amber">核心算法</span><i class="ico ico-amber">🔍</i><b>堆栈指纹归一化</b>
+        <div class="hard"><b>难题</b>　同错误堆栈行号/变量随机，文本比对无法归并</div>
+        <div class="fix"><b>突破</b>　去噪声→SHA-256 稳定指纹，自动聚合收敛告警</div></div>
+      <div class="card"><span class="tag tag-blue">省成本</span><i class="ico ico-blue">🤖</i><b>LLM 三级缓存</b>
+        <div class="hard"><b>难题</b>　LLM 慢、贵、偶发格式错误</div>
+        <div class="fix"><b>突破</b>　DB→yaml→默认三级缓存，命中跳调用+失败降级</div></div>
+      <div class="card"><span class="tag tag-blue">防风暴</span><i class="ico ico-blue">🗄️</i><b>Redis 冷却去重</b>
+        <div class="hard"><b>难题</b>　突发错误瞬间触发海量通知与工单</div>
+        <div class="fix"><b>突破</b>　同指纹冷却窗只触发一次，限流去重合一</div></div>
+      <div class="card"><span class="tag tag-blue">性能·一致</span><i class="ico ico-blue">⚡</i><b>异步解耦流水线</b>
+        <div class="hard"><b>难题</b>　同步分析阻塞业务、易读脏数据</div>
+        <div class="fix"><b>突破</b>　事务后触发，分析→建单→通知并行，零阻塞</div></div>
+      <div class="card"><span class="tag tag-blue">高可用</span><i class="ico ico-blue">🛡️</i><b>全链路故障降级</b>
+        <div class="hard"><b>难题</b>　Redis/LLM/Jira 任一故障拖垮链路</div>
+        <div class="fix"><b>突破</b>　每组件独立兜底，主链路永不中断</div></div>
+      <div class="card"><span class="tag tag-blue">安全合规</span><i class="ico ico-blue">🔒</i><b>双层敏感脱敏</b>
+        <div class="hard"><b>难题</b>　堆栈含 Token/密码/手机号，存储即泄露</div>
+        <div class="fix"><b>突破</b>　上报+存储双层脱敏，Token 仅展示一次</div></div>
+    </div>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 13 Agent 落地 -->
+  <section class="slide" data-n="13">
+    <div class="kicker">AGENT & LLM</div>
+    <h2>大模型与 7×24 Agent 落地</h2>
+    <div class="grid g2" style="align-items:center">
+      <div class="center"><div class="big">100%</div><div class="muted">代码 AI 生成率</div></div>
+      <div>
+        <ul class="pts">
+          <li>调度：任务驱动 + 子任务编排，长任务后台运行自动回调</li>
+          <li>7×24 无人值守，仅关键选型节点需开发者确认</li>
+          <li>自主产出：后端主服务 / SDK / 前端 10 页 / 数据库 10 表 / 全套文档 / 单测</li>
+          <li>1 人 1 周完成端到端 MVP，质量可交付</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 14 演示（图片占位） -->
+  <section class="slide" data-n="14">
+    <div class="kicker">DEMO</div>
+    <h2>演示效果（截图占位 · 待你自行添加）</h2>
+    <div class="grid g3" style="height:62%">
+      <div class="ph">【截图占位】<br>仪表盘<br><span class="muted">（替换为 docs/images/01-dashboard-overview.png）</span></div>
+      <div class="ph">【截图占位】<br>错误详情<br><span class="muted">（替换为 docs/images/错误详情页截图）</span></div>
+      <div class="ph">【截图占位】<br>工单详情<br><span class="muted">（替换为 docs/images/工单时间线截图）</span></div>
+    </div>
+    <p class="muted" style="margin-top:10px">说明：三个虚线框为图片占位，请将对应系统截图拖入替换即可；其余页面为矢量图表，无需替换。</p>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+  <!-- 15 结束 -->
+  <section class="slide" data-n="15">
+    <div class="center">
+      <div class="kicker">THANK YOU</div>
+      <h1>让异常自愈，让研发回归创造</h1>
+      <p class="muted" style="margin-top:12px">AIEA · AI Error Analysis ｜ 参赛人：研发一部 · 姚泽楷</p>
+    </div>
+    <div class="footer">AIEA 参赛作品 · 成果展示</div>
+  </section>
+
+</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  const cur=document.getElementById('cur'), prev=document.getElementById('prev'), next=document.getElementById('next');
+  function show(n){ i=Math.max(0,Math.min(slides.length-1,n)); slides.forEach((s,k)=>s.classList.toggle('on',k===i)); cur.textContent=i+1; prev.disabled=i===0; next.disabled=i===slides.length-1; }
+  prev.onclick=()=>show(i-1); next.onclick=()=>show(i+1);
+  document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft')show(i-1); if(e.key==='ArrowRight')show(i+1); });
+  show(0);
+</script>
+</body>
+</html>

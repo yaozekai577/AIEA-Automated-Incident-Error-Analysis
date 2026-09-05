@@ -1,0 +1,7 @@
+英文名	建议中文名	理由
+dynamic-config-service	动态配置服务	直译，准确表达 DB > yaml > 默认值 的热更新机制
+im-webhook-routing	IM通知路由	IM = 即时通讯（飞书/钉钉），"路由"体现按服务+渠道分发逻辑
+lightweight-java-sdk	轻量Java上报SDK	加"上报"二字比光说 SDK 更明确用途
+llm-client-three-tier-cache	LLM三级缓存分析	"三级缓存"是亮点（DB/yaml/默认），比直译更有技术感
+redis-cooldown-dedup	Redis冷却去重	"冷却" + "去重"两个核心动作，简洁明了
+stack-fingerprint-normalization	堆栈指纹归一化	"归一化"是标准术语（去行号/UUID/hex → SHA-256），专业

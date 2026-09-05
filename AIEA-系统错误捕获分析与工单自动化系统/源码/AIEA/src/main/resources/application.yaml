@@ -1,0 +1,93 @@
+spring:
+  application:
+    name: AIEA
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/aiea?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Redis：指纹冷却、限流、LLM 分析缓存
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          max-wait: 2000ms
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+# 大模型（阿里云百炼 / DashScope OpenAI 兼容模式）
+llm:
+  timeout: 30000
+
+# 飞书自定义机器人（全局）
+feishu:
+  webhook-url: https://open.feishu.cn/open-apis/bot/v2/hook/0c75dcac-d3a5-4d09-9308-ca4b1046be41
+
+# 钉钉（可选，暂未使用）
+dingtalk:
+  webhook-url:
+
+# Jira
+jira:
+  enabled: true
+  base-url:
+  email:
+  api-token:
+  project-key: AIEA
+  issue-type: Bug
+  enable-for-local: false
+  mock-when-unconfigured: false
+
+# 流水线
+pipeline:
+  enabled: true
+  notify-channel: feishu
+  notify-enabled: true
+  notify-max-retries: 3
+  detail-base-url: http://localhost:8080
+
+# 错误接入
+ingest:
+  dedup-cooldown-seconds: 120
+  #dedup-cooldown-seconds: 28800    # 当前 5 分钟
+  # 改大一点比如：
+  # dedup-cooldown-seconds: 3600  # 1 小时内不重复通知
+  # dedup-cooldown-seconds: 86400 # 24 小时内不重复通知
+  max-stack-length: 32768
+  max-message-length: 1024
+  # 限流（基于 Redis）
+  rate-limit-enabled: true
+  global-qps: 100
+  per-service-qps: 20

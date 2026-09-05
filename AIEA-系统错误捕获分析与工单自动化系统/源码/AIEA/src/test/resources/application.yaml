@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:aiea;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+  # 测试环境 Redis 指向不存在的端口，Redis 服务降级到 DB/旁路
+  data:
+    redis:
+      host: localhost
+      port: 6399
+      timeout: 500ms
+
+llm:
+  api-key: test
+  base-url: http://127.0.0.1:9
+  model: mock
+  analysis-cache-ttl: 0
+
+feishu:
+  webhook-url: http://127.0.0.1:9
+
+pipeline:
+  enabled: false
+  notify-enabled: false
+
+jira:
+  enabled: false
+  mock-when-unconfigured: true
+
+ingest:
+  rate-limit-enabled: false

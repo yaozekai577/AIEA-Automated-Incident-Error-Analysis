@@ -1,0 +1,530 @@
+/* ===== 登录页样式（参考 docs/loginhtml，修复空格丢失问题） ===== */
+/* 所有样式限定在 .login-page 作用域下，避免污染全局 */
+
+.login-page {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-page * {
+  box-sizing: border-box;
+}
+
+.login-page body,
+.login-page {
+  background: linear-gradient(135deg, #f0f2f5 0%, #e8eaf0 50%, #dde1ec 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.login-page .login-container {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  height: 600px;
+  background: #ffffff;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.login-page .left-section {
+  flex: 1;
+  background-color: #e9e9e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.login-page .right-section {
+  width: 50%;
+  max-width: 600px;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-page .logo {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 40px;
+}
+
+.login-page h1 {
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.login-page .subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 50px;
+}
+
+.login-page .form-group {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.login-page .form-group label {
+  display: block;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.login-page .form-group input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  font-size: 18px;
+  outline: none;
+  background: transparent;
+}
+
+.login-page .form-group input:focus {
+  border-bottom-color: #111;
+}
+
+.login-page .eye-icon {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  cursor: pointer;
+  color: #666;
+  user-select: none;
+}
+
+.login-page .form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  font-size: 14px;
+  color: #666;
+}
+
+.login-page .remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.login-page .forgot-password {
+  color: #666;
+  text-decoration: none;
+}
+
+.login-page .btn-primary {
+  width: 100%;
+  padding: 16px;
+  background-color: #111;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: opacity 0.2s ease;
+}
+
+.login-page .btn-primary:hover {
+  opacity: 0.85;
+}
+
+.login-page .btn-google {
+  width: 100%;
+  padding: 14px;
+  background-color: #f5f5f5;
+  color: #111;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.login-page .google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.login-page .login-error {
+  color: #ff4d4f;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 16px;
+  min-height: 20px;
+}
+
+.login-page .login-hint {
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+@media (max-width: 1024px) {
+  .login-page .login-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .login-page .left-section {
+    display: none;
+  }
+
+  .login-page .right-section {
+    width: 100%;
+    padding: 40px;
+  }
+}
+
+/* ===== 紫色小人 ===== */
+.login-page .purple {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 38%;
+  width: 125px;
+  height: 265px;
+  background-color: #6829FF;
+  transition: transform 0.3s ease;
+  transform-origin: bottom center;
+  perspective: 1000px;
+}
+
+.login-page .purple.lean {
+  transform: translateY(-50%) rotate(12deg) translateX(-10px);
+}
+
+/* 全体小人倾斜 */
+.login-page .purple.leanall,
+.login-page .black.leanall,
+.login-page .yellow.leanall,
+.login-page .orange.leanall {
+  transform: translateY(-50%) rotate(-8deg) translateX(-10px);
+}
+
+/* 全体小人变形 */
+.login-page .purple.peeking,
+.login-page .black.peeking,
+.login-page .yellow.peeking,
+.login-page .orange.peeking {
+  transform: translateY(-50%) !important;
+}
+
+/* 眼睛左移样式 */
+.login-page .p-eye.look-left,
+.login-page .b-eye.look-left,
+.login-page .y-eye.look-left,
+.login-page .o-eye.look-left {
+  transform: translate(-8px, 0px) !important;
+}
+
+.login-page .p-eye.look-left::after,
+.login-page .b-eye.look-left::after,
+.login-page .y-eye.look-left::after,
+.login-page .o-eye.look-left::after {
+  transform: scale(0.5) translate(-5px, 0) !important;
+}
+
+/* 嘴巴惊讶样式（高度+5px） */
+.login-page .p-mouth.surprised,
+.login-page .b-mouth.surprised,
+.login-page .y-mouth.surprised,
+.login-page .o-mouth.surprised {
+  height: 9px !important;
+  border-radius: 50%;
+}
+
+/* 紫色小人眼睛 */
+.login-page .p-eyes {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 60px;
+}
+
+.login-page .p-eyes .p-eye:nth-child(1) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 30%;
+  animation: blink 4s infinite ease-in-out;
+}
+
+.login-page .p-eyes .p-eye:nth-child(2) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  right: 5%;
+  animation: blink 4s infinite ease-in-out;
+}
+
+.login-page .p-eye::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  border-radius: 50%;
+  transform: scale(0.5);
+  transition: transform 0.2s ease;
+}
+
+.login-page .p-mouth {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-0%);
+  width: 10px;
+  height: 4px;
+  background-color: #000000;
+  transition: height 0.2s ease;
+}
+
+/* ===== 黑色小人 ===== */
+.login-page .black {
+  position: absolute;
+  top: 58%;
+  transform: translateY(-50%);
+  left: 55%;
+  width: 80px;
+  height: 190px;
+  background-color: #000000;
+  transition: transform 0.3s ease;
+}
+
+.login-page .b-eyes {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 60px;
+}
+
+.login-page .b-eyes .b-eye:nth-child(1) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 30%;
+  animation: blink 4.2s infinite ease-in-out;
+}
+
+.login-page .b-eyes .b-eye:nth-child(2) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  right: 5%;
+  animation: blink 4.2s infinite ease-in-out;
+}
+
+.login-page .b-eye::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  border-radius: 50%;
+  transform: scale(0.5);
+  transition: transform 0.2s ease;
+}
+
+.login-page .b-mouth {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-0%);
+  width: 10px;
+  height: 4px;
+  background-color: #fff;
+  transition: height 0.2s ease;
+}
+
+/* ===== 黄色小人 ===== */
+.login-page .yellow {
+  position: absolute;
+  top: 63.5%;
+  transform: translateY(-50%);
+  left: 65%;
+  width: 73px;
+  height: 125px;
+  background-color: #FFD700;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  transition: transform 0.3s ease;
+}
+
+.login-page .y-eyes {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 60px;
+}
+
+.login-page .y-eyes .y-eye:nth-child(1) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 30%;
+  animation: blink 3.8s infinite ease-in-out;
+}
+
+.login-page .y-eyes .y-eye:nth-child(2) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  right: 5%;
+  animation: blink 3.8s infinite ease-in-out;
+}
+
+.login-page .y-eye::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  border-radius: 50%;
+  transform: scale(0.5);
+  transition: transform 0.2s ease;
+}
+
+.login-page .y-mouth {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-0%);
+  width: 10px;
+  height: 4px;
+  background-color: #000000;
+  transition: height 0.2s ease;
+}
+
+/* ===== 橙色小人 ===== */
+.login-page .orange {
+  position: absolute;
+  top: 67%;
+  transform: translateY(-50%);
+  left: 22%;
+  width: 150px;
+  height: 84px;
+  background-color: #ff7b00;
+  border-top-left-radius: 130px;
+  border-top-right-radius: 130px;
+  transition: transform 0.3s ease;
+}
+
+.login-page .o-eyes {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 60px;
+}
+
+.login-page .o-eyes .o-eye:nth-child(1) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 30%;
+  animation: blink 4.5s infinite ease-in-out;
+}
+
+.login-page .o-eyes .o-eye:nth-child(2) {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  right: 5%;
+  animation: blink 4.5s infinite ease-in-out;
+}
+
+.login-page .o-eye::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  border-radius: 50%;
+  transform: scale(0.5);
+  transition: transform 0.2s ease;
+}
+
+.login-page .o-mouth {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-0%);
+  width: 10px;
+  height: 4px;
+  background-color: #000000;
+  transition: height 0.2s ease;
+}
+
+/* 眨眼动画 */
+@keyframes blink {
+  0%,
+  9%,
+  11%,
+  89%,
+  91%,
+  100% {
+    height: 10px;
+  }
+
+  10%,
+  90% {
+    height: 1px;
+  }
+}
